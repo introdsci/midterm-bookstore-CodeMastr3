@@ -187,12 +187,10 @@ summary {
 
 <div id="importing-data" class="section level1">
 <h1>Importing data</h1>
-<p>I first downloaded the data but sadly couldn’t get a working web link show other could easily replicate or mess with what I’ve done.</p>
 <p>I started off by importing the libraries and data I would be using.</p>
 <pre class="r"><code>suppressMessages(library(&quot;tidyverse&quot;))
-suppressMessages(register &lt;- read_csv(&quot;register.csv&quot;))
-suppressMessages(sales &lt;- read_csv(&quot;sales.csv&quot;))
-#N &lt;- nrow(register)</code></pre>
+suppressMessages(register &lt;- read_csv(&quot;https://raw.githubusercontent.com/introdsci/midterm-bookstore-CodeMastr3/master/register.csv&quot;))
+suppressMessages(sales &lt;- read_csv(&quot;https://raw.githubusercontent.com/introdsci/midterm-bookstore-CodeMastr3/master/sales.csv&quot;))</code></pre>
 </div>
 <div id="original-column-names-for-the-two-data-sets-register-and-sales" class="section level1">
 <h1>Original column names for the two data sets Register and Sales</h1>
@@ -265,8 +263,8 @@ colnames(sales)</code></pre>
 sales$goods &lt;- as.factor(sales$goods)</code></pre>
 </div>
 </div>
-<div id="example" class="section level1">
-<h1>Example</h1>
+<div id="example-graphs" class="section level1">
+<h1>Example Graphs</h1>
 <div id="this-is-an-example-of-something-that-you-could-look-into" class="section level3">
 <h3>This is an example of something that you could look into</h3>
 <div id="this-is-showing-how-much-a-certain-item-brought-in-from-the-register-table" class="section level5">

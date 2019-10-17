@@ -10,15 +10,12 @@ output:
 
 # Importing data
 
-I first downloaded the data but sadly couldn't get a working web link show other could easily replicate or mess with what I've done.
-
 I started off by importing the libraries and data I would be using.
 
 ```{r}
 suppressMessages(library("tidyverse"))
-suppressMessages(register <- read_csv("register.csv"))
-suppressMessages(sales <- read_csv("sales.csv"))
-#N <- nrow(register)
+suppressMessages(register <- read_csv("https://raw.githubusercontent.com/introdsci/midterm-bookstore-CodeMastr3/master/register.csv"))
+suppressMessages(sales <- read_csv("https://raw.githubusercontent.com/introdsci/midterm-bookstore-CodeMastr3/master/sales.csv"))
 ```
 
 # Original column names for the two data sets Register and Sales
@@ -71,7 +68,7 @@ purchases <- tibble(pid = register$pid, item = as.factor(register$item), charge 
 sales$goods <- as.factor(sales$goods)
 ```
 
-# Example
+# Example Graphs
 
 ### This is an example of something that you could look into
 
