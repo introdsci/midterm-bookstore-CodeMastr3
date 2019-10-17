@@ -8,7 +8,11 @@ output:
     df_print: paged
 ---
 
-Importing data
+# Importing data
+
+I first downloaded the data but sadly couldn't get a working web link show other could easily replicate or mess with what I've done.
+
+I started off by importing the libraries and data I would be using.
 
 ```{r}
 suppressMessages(library("tidyverse"))
@@ -31,7 +35,11 @@ colnames(register)
 colnames(sales)
 ```
 
-Changing column names for better understanding
+##Changing column names for better understanding
+
+### Register
+
+cid is the new customer id. pid is the purchase id. And I put unaffiliated to cut down on the size of the name but retain understanding
 
 ```{r}
 colnames(register)[colnames(register) == "is the customer a student/faculty/staff (0) or unaffiliated (1)"] <- "unaffiliated"
@@ -40,32 +48,44 @@ colnames(register)[colnames(register) == "purchase"] <- "pid"
 colnames(register)[colnames(register) == "preferred customer discount"] <- "discount"
 colnames(register)[colnames(register) == "contact preference"] <- "contact"
 
-cat("Improved column names for the register data\n")
 colnames(register)
+```
 
+### Sales
+
+goods is the type of goods.
+
+```{r}
 colnames(sales)[colnames(sales) == "category of inventory goods"] <- "goods"
 
-cat("Improved column names for the sales data\n")
 colnames(sales)
 ```
 
-## Making some Tibbles
+# Transforming the dataset tibbles to slightly better tibbles
+
+### And setting the data types to factors if they should be factors like if the charge was tax or not
 
 ```{r}
-purchases <- tibble(pid = register$pid, item = register$item, charge = register$charge, price = register$price, unaffiliated = as.factor(register$unaffiliated), cid = register$cid, receipt = as.factor(register$receipt), contact = as.factor(register$contact), newsletter = as.factor(register$newsletter), sales = as.factor(register$sales), discount = as.factor(register$discount))
+purchases <- tibble(pid = register$pid, item = as.factor(register$item), charge = as.factor(register$charge), price = register$price, unaffiliated = as.factor(register$unaffiliated), cid = register$cid, receipt = as.factor(register$receipt), contact = as.factor(register$contact), newsletter = as.factor(register$newsletter), sales = as.factor(register$sales), discount = as.factor(register$discount))
 
-# Continue from here
-song_list <- tibble(song_artist = surv$song_artist, song = surv$song, link = surv$link, name = surv$name)
+sales$goods <- as.factor(sales$goods)
+```
 
-tempPref <- pref[2:45]
+# Example
 
-temp <- gather(tempPref, key = "song_name", value = "rating", -name)
+### This is an example of something that you could look into
 
-ratings <- tibble(persName = temp$name, songName = temp$song_name, rating = temp$rating)
+##### This is showing how much a certain item brought in from the register table
 
-people$time <- as.POSIXlt(parse_datetime(people$time, format = "%D %H:%M"))
+Neither of these tables show tax as that is not money made by the store.
 
-people$major <- as.factor(people$major)
+These two tables are showing roughly the same thing but in two different ways. One shows individual unit prices by showing how big the distance is between the start of one block height wise and where it ends. The other just shows the proportion of purchase ids, showing if it was a bulk purchase or many small purchases. Although now that I've turned it into a pdf it appears that the pdf also shows the unit prices.
 
-levels(people$major)
+```{r fig.height=6, fig.width=8}
+
+ggplot(data = purchases, aes(item, ifelse(charge == "cost", price, 0), color = factor(pid))) + geom_col() + ggtitle("Income\n by Item Number") + ylab("Money Earned") + xlab("Item Number") + labs(color = "Purchase ID")
+
+ggplot(data = purchases, aes(item, ifelse(charge == "cost", price, 0))) + geom_col(fill = factor(purchases$pid)) + ggtitle("Income\n by Item Number") + ylab("Money Earned") + xlab("Item Number")
+
+
 ```
