@@ -17,15 +17,15 @@ suppressMessages(sales <- read_csv("sales.csv"))
 #N <- nrow(register)
 ```
 
-## Original column names for the two data sets Register and Sales
+# Original column names for the two data sets Register and Sales
 
-# Register
+### Register
 
 ```{r}
 colnames(register)
 ```
 
-# Sales
+### Sales
 
 ```{r}
 colnames(sales)
@@ -36,6 +36,7 @@ Changing column names for better understanding
 ```{r}
 colnames(register)[colnames(register) == "is the customer a student/faculty/staff (0) or unaffiliated (1)"] <- "unaffiliated"
 colnames(register)[colnames(register) == "customer id"] <- "cid"
+colnames(register)[colnames(register) == "purchase"] <- "pid"
 colnames(register)[colnames(register) == "preferred customer discount"] <- "discount"
 colnames(register)[colnames(register) == "contact preference"] <- "contact"
 
@@ -51,8 +52,9 @@ colnames(sales)
 ## Making some Tibbles
 
 ```{r}
-people <- tibble(generator = surv$generator, name = surv$name, sex = surv$sex, major = surv$major, grade_level = surv$grade_level, year_born = surv$year_born, instrument = surv$instrument, time = surv$time_sub)
+purchases <- tibble(pid = register$pid, item = register$item, charge = register$charge, price = register$price, unaffiliated = as.factor(register$unaffiliated), cid = register$cid, receipt = as.factor(register$receipt), contact = as.factor(register$contact), newsletter = as.factor(register$newsletter), sales = as.factor(register$sales), discount = as.factor(register$discount))
 
+# Continue from here
 song_list <- tibble(song_artist = surv$song_artist, song = surv$song, link = surv$link, name = surv$name)
 
 tempPref <- pref[2:45]
@@ -62,26 +64,6 @@ temp <- gather(tempPref, key = "song_name", value = "rating", -name)
 ratings <- tibble(persName = temp$name, songName = temp$song_name, rating = temp$rating)
 
 people$time <- as.POSIXlt(parse_datetime(people$time, format = "%D %H:%M"))
-
-for(n in 1:N) {
-  if(identical(x = people$generator[n], y ="Fake rapper name generator")) {   
-    people$generator[n] <- "rapper"
-  } else {
-    people$generator[n] <- "band"
-  }
-}
-
-## install.packages("pracma")
-
-suppressMessages(library("pracma"))
-for(n in 1:N) {
-  for(z in 1:N) {
-    if(strcmpi(people$major[n], people$major[z])) {
-      people$major[z] = people$major[n]
-    }
-  }
-}
-detach("package:pracma", unload=TRUE)
 
 people$major <- as.factor(people$major)
 
